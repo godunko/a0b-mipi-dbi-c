@@ -1,0 +1,21 @@
+name = "a0b_mipi_dbi_c"
+description = "A0B: MIPI DBI-C Driver"
+version = "0.1.0-dev"
+
+authors = ["Vadim Godunko"]
+maintainers = ["Vadim Godunko <vgodunko@gmail.com>"]
+maintainers-logins = ["godunko"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+tags = ["a0b", "embedded"]
+
+project-files = ["gnat/a0b_mipi_dbi_c.gpr"]
+
+[configuration]
+generate_ada = false
+generate_c = false
+generate_gpr = true
+
+[[depends-on]]
+a0b_awaits = "*"
+a0b_gpio = "*"
+a0b_spi = "*"
