@@ -67,6 +67,8 @@ is
 
 private
 
+   type Driver_State is (Initial, Write, Done);
+
    type MIPI_DBI_C_4_Line
      (SPI  : not null access A0B.SPI.SPI_Half_Duplex_Slave'Class;
       D_CX : not null access A0B.GPIO.Output_Line'Class)
@@ -77,6 +79,7 @@ private
         A0B.Asynchronous_Operations.Transfer_Descriptor;
       Data_Descriptor    : aliased
         A0B.Asynchronous_Operations.Transfer_Descriptor;
+      State              : Driver_State := Initial;
    end record;
 
 end A0B.MIPI_DBI_C;
