@@ -23,11 +23,9 @@ package body A0B.MIPI_DBI_C is
      (Self     : in out MIPI_DBI_C_4_Line'Class;
       Command  : Command_Code;
       Finished : A0B.Callbacks.Callback;
-      Success  : in out Boolean)
-   is
-      Await : aliased A0B.Awaits.Await;
-
+      Success  : in out Boolean) is
    begin
+      Self.State             := Done;
       Self.Finished_Callback := Finished;
 
       Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
@@ -39,14 +37,8 @@ package body A0B.MIPI_DBI_C is
       Self.D_CX.Set (False);
       Self.SPI.Transmit
         (Self.Command_Descriptor'Unchecked_Access,
-         A0B.Awaits.Create_Callback (Await),
+         On_Finished_Callbacks.Create_Callback (Self),
          Success);
-      A0B.Awaits.Suspend_Until_Callback (Await, Success);
-      Self.D_CX.Set (True);
-
-      Self.SPI.Release_Device;
-
-      A0B.Callbacks.Emit_Once (Self.Finished_Callback);
    end Command;
 
    ------------------
