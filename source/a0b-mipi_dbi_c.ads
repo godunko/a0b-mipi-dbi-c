@@ -46,12 +46,12 @@ is
       Success  : in out Boolean);
 
    procedure Command_Read
-     (Self    : in out MIPI_DBI_C_4_Line'Class;
-      Command : Command_Code;
-      Data    : in out A0B.Types.Arrays.Unsigned_8_Array;
-      --  Data    : not null Unsigned_8_Array_Variable_Access;
-      --  Finished : A0B.Callbacks.Callback;
-      Success : in out Boolean);
+     (Self     : in out MIPI_DBI_C_4_Line'Class;
+      Command  : Command_Code;
+      Data     : in out A0B.Types.Arrays.Unsigned_8_Array;
+      --  Data     : not null Unsigned_8_Array_Variable_Access;
+      Finished : A0B.Callbacks.Callback;
+      Success  : in out Boolean);
 
    --  procedure Write
    --    (Self    : in out MIPI_DBI_C_4_Line'Class;
@@ -67,7 +67,7 @@ is
 
 private
 
-   type Driver_State is (Initial, Write, Done);
+   type Driver_State is (Initial, Write, Read, Done);
 
    type MIPI_DBI_C_4_Line
      (SPI  : not null access A0B.SPI.SPI_Half_Duplex_Slave'Class;
