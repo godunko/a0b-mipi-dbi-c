@@ -24,14 +24,14 @@ package body A0B.MIPI_DBI_C is
       Self.Finished_Callback := Finished;
 
       Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
-      Self.Descriptor.Buffer := Self.Command_Buffer'Address;
-      Self.Descriptor.Length := 1;
+      Self.Command_Descriptor.Buffer := Self.Command_Buffer'Address;
+      Self.Command_Descriptor.Length := 1;
 
       Self.SPI.Select_Device (Success);
 
       Self.D_CX.Set (False);
       Self.SPI.Transmit
-        (Self.Descriptor'Unchecked_Access,
+        (Self.Command_Descriptor'Unchecked_Access,
          A0B.Awaits.Create_Callback (Await),
          Success);
       A0B.Awaits.Suspend_Until_Callback (Await, Success);
@@ -58,22 +58,22 @@ package body A0B.MIPI_DBI_C is
 
    begin
       Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
-      Self.Descriptor.Buffer := Self.Command_Buffer'Address;
-      Self.Descriptor.Length := 1;
+      Self.Command_Descriptor.Buffer := Self.Command_Buffer'Address;
+      Self.Command_Descriptor.Length := 1;
 
       Self.SPI.Select_Device (Success);
       Self.D_CX.Set (False);
       Self.SPI.Transmit
-        (Self.Descriptor'Unchecked_Access,
+        (Self.Command_Descriptor'Unchecked_Access,
          A0B.Awaits.Create_Callback (Await),
          Success);
       A0B.Awaits.Suspend_Until_Callback (Await, Success);
       Self.D_CX.Set (True);
 
-      Self.Descriptor.Buffer := Data'Address;
-      Self.Descriptor.Length := Data'Length;
+      Self.Data_Descriptor.Buffer := Data'Address;
+      Self.Data_Descriptor.Length := Data'Length;
       Self.SPI.Receive
-        (Self.Descriptor'Unchecked_Access,
+        (Self.Data_Descriptor'Unchecked_Access,
          A0B.Awaits.Create_Callback (Await),
          Success);
       A0B.Awaits.Suspend_Until_Callback (Await, Success);
@@ -97,23 +97,23 @@ package body A0B.MIPI_DBI_C is
    begin
       Self.Finished_Callback := Finished;
 
-      Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
-      Self.Descriptor.Buffer := Self.Command_Buffer'Address;
-      Self.Descriptor.Length := 1;
+      Self.Command_Buffer (0)        := A0B.Types.Unsigned_8 (Command);
+      Self.Command_Descriptor.Buffer := Self.Command_Buffer'Address;
+      Self.Command_Descriptor.Length := 1;
+      Self.Data_Descriptor.Buffer    := Data.all'Address;
+      Self.Data_Descriptor.Length    := Data'Length;
 
       Self.SPI.Select_Device (Success);
       Self.D_CX.Set (False);
       Self.SPI.Transmit
-        (Self.Descriptor'Unchecked_Access,
+        (Self.Command_Descriptor'Unchecked_Access,
          A0B.Awaits.Create_Callback (Await),
          Success);
       A0B.Awaits.Suspend_Until_Callback (Await, Success);
       Self.D_CX.Set (True);
 
-      Self.Descriptor.Buffer := Data.all'Address;
-      Self.Descriptor.Length := Data'Length;
       Self.SPI.Transmit
-        (Self.Descriptor'Unchecked_Access,
+        (Self.Data_Descriptor'Unchecked_Access,
          A0B.Awaits.Create_Callback (Await),
          Success);
       A0B.Awaits.Suspend_Until_Callback (Await, Success);

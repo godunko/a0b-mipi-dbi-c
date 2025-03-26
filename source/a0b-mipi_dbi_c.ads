@@ -71,9 +71,11 @@ private
      (SPI  : not null access A0B.SPI.SPI_Half_Duplex_Slave'Class;
       D_CX : not null access A0B.GPIO.Output_Line'Class)
    is tagged limited record
-      Finished_Callback : A0B.Callbacks.Callback;
-      Command_Buffer    : A0B.Types.Arrays.Unsigned_8_Array (0 .. 0);
-      Descriptor        : aliased
+      Finished_Callback  : A0B.Callbacks.Callback;
+      Command_Buffer     : A0B.Types.Arrays.Unsigned_8_Array (0 .. 0);
+      Command_Descriptor : aliased
+        A0B.Asynchronous_Operations.Transfer_Descriptor;
+      Data_Descriptor    : aliased
         A0B.Asynchronous_Operations.Transfer_Descriptor;
    end record;
 
