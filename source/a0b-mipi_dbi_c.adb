@@ -13,14 +13,16 @@ package body A0B.MIPI_DBI_C is
    -------------
 
    procedure Command
-     (Self    : in out MIPI_DBI_C_4_Line'Class;
-      Command : Command_Code;
-      --  Finished : A0B.Callbacks.Callback;
-      Success : in out Boolean)
+     (Self     : in out MIPI_DBI_C_4_Line'Class;
+      Command  : Command_Code;
+      Finished : A0B.Callbacks.Callback;
+      Success  : in out Boolean)
    is
       Await : aliased A0B.Awaits.Await;
 
    begin
+      Self.Finished_Callback := Finished;
+
       Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
       Self.Descriptor.Buffer := Self.Command_Buffer'Address;
       Self.Descriptor.Length := 1;
@@ -36,6 +38,8 @@ package body A0B.MIPI_DBI_C is
       Self.D_CX.Set (True);
 
       Self.SPI.Release_Device;
+
+      A0B.Callbacks.Emit_Once (Self.Finished_Callback);
    end Command;
 
    ------------------
@@ -82,15 +86,17 @@ package body A0B.MIPI_DBI_C is
    -------------------
 
    procedure Command_Write
-     (Self    : in out MIPI_DBI_C_4_Line'Class;
-      Command : Command_Code;
-      Data    : not null Unsigned_8_Array_Constant_Access;
-      --  Finished : A0B.Callbacks.Callback;
-      Success : in out Boolean)
+     (Self     : in out MIPI_DBI_C_4_Line'Class;
+      Command  : Command_Code;
+      Data     : not null Unsigned_8_Array_Constant_Access;
+      Finished : A0B.Callbacks.Callback;
+      Success  : in out Boolean)
    is
       Await : aliased A0B.Awaits.Await;
 
    begin
+      Self.Finished_Callback := Finished;
+
       Self.Command_Buffer (0) := A0B.Types.Unsigned_8 (Command);
       Self.Descriptor.Buffer := Self.Command_Buffer'Address;
       Self.Descriptor.Length := 1;
@@ -113,6 +119,8 @@ package body A0B.MIPI_DBI_C is
       A0B.Awaits.Suspend_Until_Callback (Await, Success);
 
       Self.SPI.Release_Device;
+
+      A0B.Callbacks.Emit_Once (Self.Finished_Callback);
    end Command_Write;
 
    ----------------

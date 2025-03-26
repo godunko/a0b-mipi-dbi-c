@@ -7,6 +7,7 @@
 pragma Restrictions (No_Elaboration_Code);
 
 private with A0B.Asynchronous_Operations;
+with A0B.Callbacks;
 with A0B.GPIO;
 with A0B.SPI;
 with A0B.Types.Arrays;
@@ -32,17 +33,17 @@ is
    procedure Initialize (Self : in out MIPI_DBI_C_4_Line'Class);
 
    procedure Command
-     (Self    : in out MIPI_DBI_C_4_Line'Class;
-      Command : Command_Code;
-      --  Finished : A0B.Callbacks.Callback;
-      Success : in out Boolean);
+     (Self     : in out MIPI_DBI_C_4_Line'Class;
+      Command  : Command_Code;
+      Finished : A0B.Callbacks.Callback;
+      Success  : in out Boolean);
 
    procedure Command_Write
-     (Self    : in out MIPI_DBI_C_4_Line'Class;
-      Command : Command_Code;
-      Data    : not null Unsigned_8_Array_Constant_Access;
-      --  Finished : A0B.Callbacks.Callback;
-      Success : in out Boolean);
+     (Self     : in out MIPI_DBI_C_4_Line'Class;
+      Command  : Command_Code;
+      Data     : not null Unsigned_8_Array_Constant_Access;
+      Finished : A0B.Callbacks.Callback;
+      Success  : in out Boolean);
 
    procedure Command_Read
      (Self    : in out MIPI_DBI_C_4_Line'Class;
@@ -70,8 +71,10 @@ private
      (SPI  : not null access A0B.SPI.SPI_Half_Duplex_Slave'Class;
       D_CX : not null access A0B.GPIO.Output_Line'Class)
    is tagged limited record
-      Command_Buffer : A0B.Types.Arrays.Unsigned_8_Array (0 .. 0);
-      Descriptor     : aliased A0B.Asynchronous_Operations.Transfer_Descriptor;
+      Finished_Callback : A0B.Callbacks.Callback;
+      Command_Buffer    : A0B.Types.Arrays.Unsigned_8_Array (0 .. 0);
+      Descriptor        : aliased
+        A0B.Asynchronous_Operations.Transfer_Descriptor;
    end record;
 
 end A0B.MIPI_DBI_C;
