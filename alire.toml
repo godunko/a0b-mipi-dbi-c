@@ -16,6 +16,5 @@ generate_c = false
 generate_gpr = true
 
 [[depends-on]]
-a0b_awaits = "*"
 a0b_gpio = "*"
 a0b_spi = "*"
